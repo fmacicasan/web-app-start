@@ -1,5 +1,7 @@
 package my.apps.web;
 
+import my.apps.db.DemoCRUDOperations;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -7,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +48,7 @@ public class ShoppingListServlet extends HttpServlet {
         String produs = request.getParameter("produs");
         String cantitate = request.getParameter("cantitate");
 
-        Item itemulNou = new Item(produs, cantitate);
+        Item itemulNou = new Item(produs, Integer.parseInt(cantitate));
 
         items.add(itemulNou);
 
@@ -58,9 +61,17 @@ public class ShoppingListServlet extends HttpServlet {
 
     private void listAction(HttpServletRequest request, HttpServletResponse response) {
         String jsonResponse = "[";
+        List<Item> items = new ArrayList<>();
+        try {
+            items = DemoCRUDOperations.readShoppingItems();
+        } catch (ClassNotFoundException e) {
+            items.add(new Item("Eroare de clasa:" + e.getMessage(), -789452));
+        } catch (SQLException e) {
+            items.add(new Item("Erorare de sql:" + e.getMessage(), -5632));
+        }
         for(int i= 0 ; i< items.size() ; i++) {
             String nume = items.get(i).getNume();
-            String cantitate = items.get(i).getCantitate();
+            int cantitate = items.get(i).getCantitate();
             String element = "{\"nume\": \"" + nume + "\", \"cantitate\": " + cantitate + "}";
             jsonResponse += element;
             if(i < items.size() - 1) {

@@ -2,7 +2,6 @@ package my.apps.db;
 import my.apps.web.Item;
 
 import java.sql.*;
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class DemoCRUDOperations {
         try {
             //demo CRUD operations
 //            demoCreate();
-            demoRead();
+            readShoppingItems();
 //            demoUpdate();
 //            demoDelete();
 
@@ -64,7 +63,7 @@ public class DemoCRUDOperations {
         conn.close();
     }
 
-    private static List<Item> demoRead() throws ClassNotFoundException, SQLException {
+    public static List<Item> readShoppingItems() throws ClassNotFoundException, SQLException {
 
         // 1. load the driver
         Class.forName("org.postgresql.Driver");
@@ -82,12 +81,12 @@ public class DemoCRUDOperations {
         List<Item> items = new ArrayList<>();
         while (rs.next()) {
             String nume = rs.getString("nume");
-            String cantitate = rs.getString("cantitate");
+            int cantitate = rs.getInt("cantitate");
             Item item = new Item(nume, cantitate);
             items.add(item);
             System.out.print(nume.trim());
             System.out.print("---");
-            System.out.println(cantitate.trim());
+            System.out.println(cantitate);
         }
 
         // 6. close the objects
