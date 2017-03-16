@@ -50,6 +50,14 @@ public class ShoppingListServlet extends HttpServlet {
 
         Item itemulNou = new Item(produs, Integer.parseInt(cantitate));
 
+        try {
+            DemoCRUDOperations.writeShoppingItem(itemulNou);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
         items.add(itemulNou);
 
         try {
